@@ -31,3 +31,11 @@ We need...
 read_statistics <- get_tsv_from_run_folder("RUN01")
 
 ```
+
+```{r make_graphs}
+
+
+make_ggplot_scatterplot(read_statistics, read_statistics$total_bases_mbp, read_statistics$bin_count) + 
+  geom_point(aes(color = read_statistics$bin_count == 0))
+
+```
