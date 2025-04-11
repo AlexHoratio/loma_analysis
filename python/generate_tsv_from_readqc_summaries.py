@@ -21,8 +21,7 @@ def generate_tsv_from_readqc_summaries(run_accessions, run_directory=""):
 	}
 
 	for run_acc in run_accessions:
-		summary_file_loc = (run_directory) + run_acc + "/summary/" + run_acc + ".RUN01.readqc_report.html"
-		summary_file = open(summary_file_loc)
+		summary_file = open((run_directory) + run_acc + "/summary/" + run_acc + ".RUN01.readqc_report.html")
 		summary_file_lines = summary_file.readlines()
 
 		run_acc_data = {}
@@ -39,10 +38,31 @@ def generate_tsv_from_readqc_summaries(run_accessions, run_directory=""):
 			if "Total bases" in summary_file_lines[i]:
 				run_acc_data["total_bases_mbp"] = summary_file_lines[i + 1].strip().replace("<td>", "").replace("</td>", "")
 
+		contig_coverage_loc = (run_directory) + run_acc + "/assembly/contig_qc/coverage/" + run_acc + ".coverage.txt"
+
+		if os.path.exists(contig_coverage_loc):
+			contig_coverage_file = open(contig_coverage_loc)
+			contig_coverage_lines = contig_coverage_file.readlines()
+			run_acc_data["contig_count"] = str(len(contig_coverage_lines) - 1)
+
+		else:
+			run_acc_data["contig_count"] = "0"
+
+
+		assembly_stats_loc = (run_directory) + run_acc + "/assembly/bin_QC/assembly_stats/" + run_acc + ".RUN01.assembly_stats.csv"
+
+		if os.path.exists(assembly_stats_loc):
+			assembly_stats_file = open(assembly_stats_loc)
+			assembly_stats_lines = assembly_stats_file.readlines()
+			run_acc_data["bin_count"] = str(len(assembly_stats_lines) - 1)
+
+		else:
+			run_acc_data["bin_count"] = "0"
+
 		readqc_summary_data[run_acc] = run_acc_data
 
 	readqc_summary_tsv = "run_accession	"
-	readqc_summary_colnames = ["number_of_reads", "mean_read_length", "read_n50", "mean_read_quality", "total_bases_mbp"]
+	readqc_summary_colnames = ["number_of_reads", "mean_read_length", "read_n50", "mean_read_quality", "total_bases_mbp", "contig_count", "bin_count"]
 
 	for i in range(len(readqc_summary_colnames)):
 		readqc_summary_tsv += readqc_summary_colnames[i] + ("\t" if (i + 1) < len(readqc_summary_colnames) else "")

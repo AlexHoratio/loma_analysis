@@ -26,8 +26,8 @@ We need...
 -   *Diversity information*
     -   Shannon/Inv. Simpson
 
-```{r read_statistics} 
+```{r read_statistics}
 
-get_tsv_from_run_folder("RUN01")
+read_statistics <- get_tsv_from_run_folder("RUN01")
 
 ```
