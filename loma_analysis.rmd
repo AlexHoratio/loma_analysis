@@ -29,6 +29,7 @@ We need...
 ```{r read_statistics}
 
 read_statistics <- get_tsv_from_run_folder("RUN01")
+write_tsv(read_statistics, paste0(this.dir(), "/read_statistics.tsv"))
 
 ```
 
