@@ -1,0 +1,33 @@
+---
+title: "LOMA Analysis"
+author: "Alex Caswell"
+date: "2025-04-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r imports}
+
+source("get_stats_from_readqc.r")
+
+```
+
+# What's the plan?!
+
+We need...
+
+-   Read statistics for every input file (*b.p., n50, \# reads, filesize*)
+-   Assembly information
+    -   \# of contigs
+    -   \# of bins
+-   *Diversity information*
+    -   Shannon/Inv. Simpson
+
+```{r read_statistics} 
+
+get_tsv_from_run_folder("RUN01")
+
+```
