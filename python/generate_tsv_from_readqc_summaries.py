@@ -54,15 +54,26 @@ def generate_tsv_from_readqc_summaries(run_accessions, run_directory=""):
 		if os.path.exists(assembly_stats_loc):
 			assembly_stats_file = open(assembly_stats_loc)
 			assembly_stats_lines = assembly_stats_file.readlines()
-			run_acc_data["bin_count"] = str(len(assembly_stats_lines) - 1)
+			number_of_bins = len(assembly_stats_lines) - 1
+
+			run_acc_data["bin_count"] = str(number_of_bins)
+			
+			t = 0
+			for i in range(len(assembly_stats_lines)):
+				if i != 0:
+					split_line = assembly_stats_lines[i].split(",")
+					t += int(split_line[7].strip())
+
+			run_acc_data["average_bin_n50"] = str(float(t) / float(number_of_bins))
 
 		else:
 			run_acc_data["bin_count"] = "0"
+			run_acc_data["average_bin_n50"] = "0"
 
 		readqc_summary_data[run_acc] = run_acc_data
 
 	readqc_summary_tsv = "run_accession	"
-	readqc_summary_colnames = ["number_of_reads", "mean_read_length", "read_n50", "mean_read_quality", "total_bases_mbp", "contig_count", "bin_count"]
+	readqc_summary_colnames = ["number_of_reads", "mean_read_length", "read_n50", "mean_read_quality", "total_bases_mbp", "contig_count", "bin_count", "average_bin_n50"]
 
 	for i in range(len(readqc_summary_colnames)):
 		readqc_summary_tsv += readqc_summary_colnames[i] + ("\t" if (i + 1) < len(readqc_summary_colnames) else "")
